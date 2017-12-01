@@ -7,7 +7,7 @@
       #navbarNav.collapse.navbar-collapse
         ul.navbar-nav
           li.nav-item
-            a.nav-link(href="/upload") Upload
+            a.nav-link(ng-click="page.$location.path('/upload')") Upload
           li.nav-item
             a.nav-link(href="" ng-click="page.logout()") Logout
       div Welcome, {{page.userService.getUser()}}
