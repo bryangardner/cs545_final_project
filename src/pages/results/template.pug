@@ -1,0 +1,69 @@
+#results-controller(ng-controller="resultsController as page")
+  .container
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      .navbar-brand(href="") MyStudyPlan
+      button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      #navbarNav.collapse.navbar-collapse
+        ul.navbar-nav
+          li.nav-item
+            a.nav-link(href="/upload") Upload
+          li.nav-item
+            a.nav-link(href="" ng-click="page.logout()") Logout
+      div Welcome, {{page.userService.getUser()}}
+  #results-content.container.content
+    div.status
+      i.material-icons {{page.status.icon}}
+      h4 {{page.status.message}}
+    .nav.nav-tabs.requirement-tabs
+      li.nav-item(ng-repeat="requirement in page.status.requirements | orderBy: 'section'")
+        a.requirements-tab.nav-link(href=""
+          ng-click="page.section = requirement.section"
+          ng-class="{'active': page.section == requirement.section, 'incomplete': page.getCompletionStatus(requirement) == 'incomplete', 'pending': page.getCompletionStatus(requirement) == 'pending', 'complete': page.getCompletionStatus(requirement) == 'complete'}"
+        )
+          i.material-icons(ng-show="page.getCompletionStatus(requirement) == 'incomplete'") warning
+          i.material-icons(ng-show="page.getCompletionStatus(requirement) == 'pending'") info
+          i.material-icons(ng-show="page.getCompletionStatus(requirement) == 'complete'") check_circle
+          | {{requirement.section}}
+    div.requirements-section(ng-repeat="requirement in page.status.requirements" ng-show="page.section == requirement.section")
+      .row
+        .col-4
+          ul.icon-list
+            li.complete
+              .valign-center
+                i.material-icons check
+                | = Complete
+            li.pending
+              .valign-center
+                i.material-icons info
+                | = Scheduled
+            li.incomplete
+              .valign-center
+                i.material-icons warning
+                | = Incomplete
+          p Click a course for more information.
+        .col-4
+          .card.scrollable-400
+            .card-body
+            ul.icon-list
+              li(ng-repeat="req in requirement.reqs" ng-class="{'incomplete': !req.completed && !req.selected, 'pending': !req.completed && req.selected, 'complete': req.completed}")
+                .valign-center.clickable(ng-click="page.help = req.name" )
+                  i.material-icons(ng-if="req.completed == false && !req.selected") warning
+                  i.material-icons(ng-if="req.completed == true && req.selected") check
+                  i.material-icons(ng-if="req.completed == false && req.selected") info
+                  | {{req.name}}
+        .col-4
+          .card(ng-repeat="req in requirement.reqs" ng-show="page.help == req.name")
+            .card-body {{req.message}}
+              p(ng-if="req.recommendations.length > 0") Remarks: Please select a course.
+                .form-check(ng-repeat="rec in req.recommendations")
+                  label.form-check-label
+                    input.form-check-input(type="radio" ng-model="req.selected" ng-value="rec")
+                    | {{rec}}
+                p(ng-if="!req.recommendations && !req.completed") Remarks: It will be scheduled for you.
+                p(ng-if="req.completed") Remarks: You have satisfied this requirement with {{req.selected}}.
+    .row(ng-show="page.checkAllScheduled()")
+      .col-6
+        button.btn.btn-primary.download-button(type="button" ng-click="page.generate()") Download Completed Study Plan
+      .col-6
+        button.btn.btn-danger.download-button(type="button" ng-click="page.generate()") Download Completed Application for Candidacy

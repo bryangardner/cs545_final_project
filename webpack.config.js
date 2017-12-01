@@ -38,7 +38,8 @@ let config = {
     ]
   },
   devServer: {
-    contentBase: BUILD_DIR
+    contentBase: BUILD_DIR,
+    historyApiFallback: true
   },
   plugins: [
     new CleanWebpackPlugin(path.join(BUILD_DIR, "*.js")),

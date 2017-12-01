@@ -1,19 +1,26 @@
 class HomeController {
-  constructor($location) {
+  constructor($location, userService) {
     this.$location = $location
 
     this.username = "";
     this.password = "";
 
     this.missingUsername = false;
-    this.missingPassword = false
+    this.missingPassword = false;
+
+    this.userService = userService;
+
+    $(".modal").on("shown.bs.modal", function() {
+      $(this).find('[autofocus]').focus()
+    })
   }
 
   login() {
     if (this.username && this.password) {
       $("body").removeClass("modal-open")
       $(".modal-backdrop").remove()
-      this.$location.path("/login").search({username: this.username})
+      this.userService.setUser(this.username);
+      this.$location.path("/upload")
     }
 
     if (!this.username) {

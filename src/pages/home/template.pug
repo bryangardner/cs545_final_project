@@ -1,9 +1,11 @@
-div(ng-controller="homeController as page")
-  div.jumbotron.jumbotron-fluid
-    .container
+#home-controller(ng-controller="homeController as page")
+  .container
+    .jumbotron
       h1.display-3 MyStudyPlan
       p.lead Stop wasting time re-doing your Study Plan.
-      p.lead Use our automated system to tell whether or not you're set to graduate.
+      .info
+        p Use our automated system to generate your study plan from an export of your transcript.
+        p We will tell you when you are projected to graduate, and help you plan your future courses in compliance with the Stevens computer science curriculum.
       button.btn.btn-primary(data-toggle="modal" data-target="#login") Login
   .modal.fade(id="login" tabindex="-1" role="dialog")
     .modal-dialog(role="document")
@@ -16,7 +18,7 @@ div(ng-controller="homeController as page")
           form(ng-submit="page.login()")
             .form-group
               label.form-control-label.form-control-danger(for="username") MyStevens Username
-              input#username.form-control(type="text" ng-model="page.username" ng-class="{'is-invalid': page.missingUsername}")
+              input#username.form-control(type="text" ng-model="page.username" ng-class="{'is-invalid': page.missingUsername}" autofocus="autofocus")
               div(ng-if="page.missingUsername").invalid-feedback Please provide a username.
             .form-group
               label.form-control-label.form-control-danger(for="password") Password

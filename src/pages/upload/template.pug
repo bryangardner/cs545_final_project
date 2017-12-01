@@ -1,0 +1,30 @@
+#upload-controller(ng-controller="uploadController as page")
+  .container
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      .navbar-brand(href="") MyStudyPlan
+      button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      #navbarNav.collapse.navbar-collapse
+        ul.navbar-nav
+          li.nav-item
+            a.nav-link(href="/upload") Upload
+          li.nav-item
+            a.nav-link(href="" ng-click="page.logout()") Logout
+  #account-content.container.content(ng-if="page.loading != true")
+    .jumbotron
+      h2.display-3 Upload a Transcript
+      p.lead Use our automated system to tell whether or not you're set to graduate.
+      p For the purposes of this prototype, please select any file. It is not actually uploaded anywhere.
+      form
+        .form-group
+          input#transcript_upload.form-control-file(type="file")
+          
+        .form-group
+          button.btn.btn-primary(type="button" ng-click="page.upload().bind(page)" style="width: 80px;") GO
+
+  .spinner(ng-show="page.loading == true")
+    .rect1
+    .rect2
+    .rect3
+    .rect4
+    .rect5

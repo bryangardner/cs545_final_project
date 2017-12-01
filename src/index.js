@@ -1,11 +1,18 @@
 require("bootstrap")
 require("bootstrap/dist/css/bootstrap.min.css")
+require("./style.css")
+window._ = require("lodash")
+
 const angular = require("angular")
 
-const app = angular.module("myStudyPlan", [require("angular-route")]);
+window.$ = require("jquery")
+
+const app = angular.module("myStudyPlan", [require("angular-route"), require("angular-animate")]);
 
 const pages = [
-  require("./home")
+  require("./pages/home"),
+  require("./pages/upload"),
+  require("./pages/results")
 ]
 
 for (let i = 0; i < pages.length; i++) {
@@ -13,8 +20,7 @@ for (let i = 0; i < pages.length; i++) {
   app.controller(page.name, page.controller)
 }
 
-app.controller("mainController", ($scope) => {
-  $scope.hi = "asdf"
+app.controller("mainController", function($scope) {
 })
 
 app.config(($routeProvider, $locationProvider) => {
@@ -25,5 +31,29 @@ app.config(($routeProvider, $locationProvider) => {
       controller: page.name
     })
   }
-  console.log($routeProvider)
+
+  $routeProvider.otherwise({
+    redirectTo: "/"
+  })
+
+  $locationProvider.html5Mode(true)
 })
+
+app.service("userService", require("./services/UserService"))
+app.service("dataService", require("./services/DataService"))
+app.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.fileread = changeEvent.target.files[0];
+                    // or all selected files:
+                    // scope.fileread = changeEvent.target.files;
+                });
+            });
+        }
+    }
+}]);
