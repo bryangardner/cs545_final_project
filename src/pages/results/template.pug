@@ -67,3 +67,6 @@
         button.btn.btn-primary.download-button(type="button" ng-click="page.generate()") Download Completed Study Plan
       .col-6
         button.btn.btn-danger.download-button(type="button" ng-click="page.generate()") Download Completed Application for Candidacy
+    .row(ng-show="!page.checkAllScheduled()")
+      .col-12
+        p Please visit the tabs and select courses for each of the "incomplete" requirements. Once you select courses and all of the requirements are in the "pending" or "completed" state, download options will become available.
